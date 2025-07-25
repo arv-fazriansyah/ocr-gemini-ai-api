@@ -21,25 +21,35 @@ Proyek ini memungkinkan Anda mengunggah file Kartu Tanda Penduduk (KTP) atau Kar
 Output hasil OCR akan dalam bentuk array of object seperti ini:
 
 ```json
-[{
-  "nama": "",
-  "tempat_tanggal_lahir": "",
-  "jenis_kelamin": "",
-  "golongan_darah": "",
-  "alamat": {
-    "jalan": "",
-    "RT": "",
-    "RW": "",
-    "desa": "",
-    "kecamatan": "",
-    "kabupaten": "",
-    "provinsi": ""
-  },
-  "agama": "",
-  "status_perkawinan": "",
-  "pekerjaan": "",
-  "kewarganegaraan": ""
-}]
+  [
+    (jika ada tampilkan {
+      "no_kk": ""
+    }),
+    {
+        "nik": "",
+        "nama": "",
+        "tempat_lahir": "",
+        "tanggal_lahir": "",
+        "jenis_kelamin": "",
+        "golongan_darah": "",
+        "alamat": {
+          "jalan": "",
+          "RT": "",
+          "RW": "",
+          "desa": "",
+          "kecamatan": "",
+          "kabupaten": "",
+          "provinsi": ""
+        },
+        "agama": "",
+        (jika ada tampilkan {
+          "pendidikan": ""
+        }),
+        "status_perkawinan": "",
+        "pekerjaan": "",
+        "kewarganegaraan": ""
+      }
+  ]
 ```
 
 ---
