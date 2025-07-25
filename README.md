@@ -2,7 +2,7 @@
 ---
 ![Demo](https://github.com/arv-fazriansyah/ocr-gemini-ai-api/raw/main/img/demo.png)
 # **OCR berbasis Cloudflare Worker + Gemini API**
-Proyek ini memungkinkan Anda mengunggah gambar (JPG) atau PDF, lalu mengekstrak informasi teks dalam format JSON terstruktur menggunakan Google Gemini API (`gemini-2.5-flash`).
+Proyek ini memungkinkan Anda mengunggah file Kartu Tanda Penduduk (KTP) atau Kartu Keluarga (KK) dalam bentuk (JPG) atau PDF, lalu mengekstrak informasi teks dalam format JSON terstruktur menggunakan Google Gemini API (`gemini-2.5-flash`).
 
 ---
 
