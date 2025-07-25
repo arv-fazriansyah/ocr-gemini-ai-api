@@ -267,14 +267,17 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
           }
       
-          document.getElementById('removeFile').addEventListener('click', () => {
-            const uploadDefault = document.getElementById('uploadDefault');
+            document.getElementById('removeFile').addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation(); // Tambahan penting
             
-            fileInput.value = '';
-            filePreview.classList.add('hidden');
-            uploadDefault.classList.remove('hidden');
-            uploadArea.classList.remove('border-green-300', 'bg-green-50');
-          });
+              const uploadDefault = document.getElementById('uploadDefault');
+            
+              fileInput.value = '';
+              filePreview.classList.add('hidden');
+              uploadDefault.classList.remove('hidden');
+              uploadArea.classList.remove('border-green-300', 'bg-green-50');
+            });
       
           // Copy functionality
           copyBtn.addEventListener('click', async () => {
