@@ -26,10 +26,10 @@ const CONFIG = {
       "no_kk": ""
     }),
     {
-      "data": {
         "nik": "",
         "nama": "",
-        "tempat_tanggal_lahir": "",
+        "tempat_lahir": "",
+        "tanggal_lahir": "",
         "jenis_kelamin": "",
         "golongan_darah": "",
         "alamat": {
@@ -42,11 +42,13 @@ const CONFIG = {
           "provinsi": ""
         },
         "agama": "",
+        (jika ada tampilkan {
+          "pendidikan": ""
+        }),
         "status_perkawinan": "",
         "pekerjaan": "",
         "kewarganegaraan": ""
       }
-    }
   ]`,
 };
 
