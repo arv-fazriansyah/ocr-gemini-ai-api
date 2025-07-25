@@ -1,349 +1,274 @@
-      <!DOCTYPE html>
-      <html lang="id">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>📄 OCR Viewer</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-          
-          body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-          }
-          
-          .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-          }
-          
-          .upload-area {
-            border: 2px dashed #e5e7eb;
-            transition: all 0.3s ease;
-          }
-          
-          .upload-area:hover {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-          }
-          
-          .upload-area.dragover {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-            transform: scale(1.02);
-          }
-          
-          .btn-gradient {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            transition: all 0.3s ease;
-          }
-          
-          .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-          }
-          
-          .result-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-left: 4px solid #3b82f6;
-          }
-          
-          .loading-dots::after {
-            content: '';
-            animation: dots 1.5s steps(5, end) infinite;
-          }
-          
-          @keyframes dots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
-          }
-          
-          .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-          }
-          
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-          
-          .fade-in {
-            animation: fadeIn 0.5s ease-in;
-          }
-          
-          @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          
-          .file-icon {
-            font-size: 3rem;
-            color: #6b7280;
-          }
-          
-          .success-animation {
-            animation: success 0.6s ease-in-out;
-          }
-          
-          @keyframes success {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-          }
-        </style>
-      </head>
-      <body class="min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-2xl">
-          <!-- Header -->
-          <div class="text-center mb-8 fade-in">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-lg mb-4">
-              <span class="text-3xl">📄</span>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📄 OCR Viewer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .upload-area {
+      border: 2px dashed #e5e7eb;
+      transition: all 0.3s ease;
+    }
+    .upload-area:hover {
+      border-color: #3b82f6;
+      background-color: #f8fafc;
+    }
+    .upload-area.dragover {
+      border-color: #3b82f6;
+      background-color: #eff6ff;
+      transform: scale(1.02);
+    }
+    .btn-gradient {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+    }
+    .result-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-left: 4px solid #3b82f6;
+    }
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+    @keyframes dots {
+      0%, 20% { content: ''; }
+      40% { content: '.'; }
+      60% { content: '..'; }
+      80%, 100% { content: '...'; }
+    }
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .file-icon { font-size: 3rem; color: #6b7280; }
+    .success-animation {
+      animation: success 0.6s ease-in-out;
+    }
+    @keyframes success {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-2xl">
+    <!-- Header -->
+    <div class="text-center mb-8 fade-in">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-lg mb-4">
+        <span class="text-3xl">📄</span>
+      </div>
+      <h1 class="text-3xl font-bold text-white mb-2">OCR Viewer</h1>
+      <p class="text-blue-100">Upload gambar atau PDF untuk ekstraksi teks otomatis</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="glass-card rounded-2xl shadow-2xl p-8 fade-in">
+      <form id="ocrForm">
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Pilih File untuk Diproses</label>
+          <div id="uploadArea" class="upload-area rounded-xl p-8 text-center cursor-pointer">
+            <div id="uploadDefault">
+              <div class="file-icon mb-4">📁</div>
+              <p class="text-lg font-medium text-gray-700 mb-2">Klik untuk memilih file atau drag & drop</p>
+              <p class="text-sm text-gray-500">Mendukung JPG, PNG, PDF (Maks. 10MB)</p>
             </div>
-            <h1 class="text-3xl font-bold text-white mb-2">OCR Viewer</h1>
-            <p class="text-blue-100">Upload gambar atau PDF untuk ekstraksi teks otomatis</p>
-          </div>
-      
-          <!-- Main Card -->
-          <div class="glass-card rounded-2xl shadow-2xl p-8 fade-in">
-            <form id="ocrForm">
-              <!-- Upload Area -->
-              <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-3">
-                  Pilih File untuk Diproses
-                </label>
-                <div id="uploadArea" class="upload-area rounded-xl p-8 text-center cursor-pointer">
-                  <!-- Default Upload State -->
-                  <div id="uploadDefault">
-                    <div class="file-icon mb-4">📁</div>
-                    <div id="uploadText">
-                      <p class="text-lg font-medium text-gray-700 mb-2">
-                        Klik untuk memilih file atau drag & drop
-                      </p>
-                      <p class="text-sm text-gray-500">
-                        Mendukung JPG, PNG, PDF (Maks. 10MB)
-                      </p>
-                    </div>
+            <div id="filePreview" class="hidden">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <span id="fileIcon" class="text-2xl">📄</span>
                   </div>
-                  
-                  <!-- File Preview Inside Box -->
-                  <div id="filePreview" class="hidden">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <span id="fileIcon" class="text-2xl">📄</span>
-                        </div>
-                        <div class="text-left">
-                          <p id="fileName" class="font-medium text-gray-900 text-lg"></p>
-                          <p id="fileSize" class="text-sm text-gray-500"></p>
-                          <p class="text-xs text-green-600 mt-1">✓ File siap diproses</p>
-                        </div>
-                      </div>
-                      <button type="button" id="removeFile" class="text-red-500 hover:text-red-700 transition-colors p-2">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                      </button>
-                    </div>
+                  <div class="text-left">
+                    <p id="fileName" class="font-medium text-gray-900 text-lg"></p>
+                    <p id="fileSize" class="text-sm text-gray-500"></p>
+                    <p class="text-xs text-green-600 mt-1">✓ File siap diproses</p>
                   </div>
-                  
-                  <input type="file" id="formFile" name="file" accept=".png,.jpg,.jpeg,.pdf" required class="hidden">
                 </div>
-              </div>
-      
-              <!-- Submit Button -->
-              <button type="submit" id="submitBtn" class="btn-gradient w-full py-4 px-6 rounded-xl text-white font-semibold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                <span id="btnText">🚀 Jalankan OCR</span>
-                <div id="btnSpinner" class="hidden spinner mx-auto"></div>
-              </button>
-            </form>
-      
-            <!-- Results -->
-            <div id="resultContainer" class="hidden mt-8">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">Hasil Ekstraksi</h3>
-                <button id="copyBtn" class="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
-                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
-                  </svg>
-                  <span>Salin</span>
+                <button type="button" id="removeFile" aria-label="Hapus file" class="text-red-500 hover:text-red-700 p-2">
+                  ❌
                 </button>
               </div>
-              
-              <div class="result-card rounded-xl p-6 max-h-96 overflow-y-auto">
-                <div id="loadingState" class="text-center py-8">
-                  <div class="inline-block w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                  <p class="text-gray-600 loading-dots">Memproses file</p>
-                </div>
-                <pre id="result" class="hidden whitespace-pre-wrap text-sm text-gray-800 font-mono leading-relaxed"></pre>
-              </div>
             </div>
-          </div>
-      
-          <!-- Footer -->
-          <div class="text-center mt-8 text-blue-100 text-sm">
-            <p>Powered by OCR Technology • Secure & Private</p>
+            <input type="file" id="formFile" name="file" accept=".png,.jpg,.jpeg,.pdf" required class="hidden">
           </div>
         </div>
-      
-        <script>
-          const form = document.getElementById('ocrForm');
-          const resultEl = document.getElementById('result');
-          const submitBtn = document.getElementById('submitBtn');
-          const uploadArea = document.getElementById('uploadArea');
-          const fileInput = document.getElementById('formFile');
-          const filePreview = document.getElementById('filePreview');
-          const resultContainer = document.getElementById('resultContainer');
-          const loadingState = document.getElementById('loadingState');
-          const btnText = document.getElementById('btnText');
-          const btnSpinner = document.getElementById('btnSpinner');
-          const copyBtn = document.getElementById('copyBtn');
-      
-          // File upload handling
-          uploadArea.addEventListener('click', () => fileInput.click());
-          
-          uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-          });
-          
-          uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-          });
-          
-          uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-              fileInput.files = files;
-              showFilePreview(files[0]);
-            }
-          });
-      
-          fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-              showFilePreview(e.target.files[0]);
-            }
-          });
-      
-          function showFilePreview(file) {
-            const fileName = document.getElementById('fileName');
-            const fileSize = document.getElementById('fileSize');
-            const fileIcon = document.getElementById('fileIcon');
-            const uploadDefault = document.getElementById('uploadDefault');
-            
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
-            
-            // Set appropriate icon
-            if (file.type.includes('pdf')) {
-              fileIcon.textContent = '📄';
-            } else if (file.type.includes('image')) {
-              fileIcon.textContent = '🖼️';
-            }
-            
-            // Hide default state and show file preview
-            uploadDefault.classList.add('hidden');
-            filePreview.classList.remove('hidden');
-            uploadArea.classList.add('border-green-300', 'bg-green-50');
-          }
-      
-          function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-          }
-      
-            document.getElementById('removeFile').addEventListener('click', (e) => {
-              e.preventDefault();
-              e.stopPropagation(); // Tambahan penting
-            
-              const uploadDefault = document.getElementById('uploadDefault');
-            
-              fileInput.value = '';
-              filePreview.classList.add('hidden');
-              uploadDefault.classList.remove('hidden');
-              uploadArea.classList.remove('border-green-300', 'bg-green-50');
-            });
-      
-          // Copy functionality
-          copyBtn.addEventListener('click', async () => {
-            try {
-              await navigator.clipboard.writeText(resultEl.textContent);
-              copyBtn.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg><span>Tersalin!</span>';
-              setTimeout(() => {
-                copyBtn.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg><span>Salin</span>';
-              }, 2000);
-            } catch (err) {
-              console.error('Failed to copy text: ', err);
-            }
-          });
-      
-          // Form submission
-          form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const file = fileInput.files[0];
-            if (!file) return;
-      
-            const formData = new FormData();
-            formData.append('file', file);
-      
-            // Show loading state
-            resultContainer.classList.remove('hidden');
-            loadingState.classList.remove('hidden');
-            resultEl.classList.add('hidden');
-            
-            btnText.classList.add('hidden');
-            btnSpinner.classList.remove('hidden');
-            submitBtn.disabled = true;
-      
-            try {
-              const res = await fetch('/', {
-                method: 'POST',
-                body: formData
-              });
-      
-              const contentType = res.headers.get('content-type') || '';
-              const text = await res.text();
-      
-              // Hide loading state
-              loadingState.classList.add('hidden');
-              resultEl.classList.remove('hidden');
-      
-              try {
-                const data = contentType.includes('json') ? JSON.stringify(JSON.parse(text), null, 2) : text;
-                resultEl.textContent = data;
-              } catch {
-                resultEl.textContent = text;
-              }
-      
-              // Success animation
-              resultContainer.classList.add('success-animation');
-              setTimeout(() => resultContainer.classList.remove('success-animation'), 600);
-      
-            } catch (error) {
-              loadingState.classList.add('hidden');
-              resultEl.classList.remove('hidden');
-              resultEl.textContent = 'Error: Gagal memproses file. Silakan coba lagi.';
-            } finally {
-              btnText.classList.remove('hidden');
-              btnSpinner.classList.add('hidden');
-              submitBtn.disabled = false;
-            }
-          });
-        </script>
-      <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96480b013009ff81',t:'MTc1MzQwODYwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-      </html>
+
+        <button type="submit" id="submitBtn" class="btn-gradient w-full py-4 px-6 rounded-xl text-white font-semibold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+          <span id="btnText">🚀 Jalankan OCR</span>
+          <div id="btnSpinner" class="hidden spinner mx-auto" role="status"></div>
+        </button>
+      </form>
+
+      <div id="resultContainer" class="hidden mt-8">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">Hasil Ekstraksi</h3>
+          <button id="copyBtn" class="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg" aria-label="Salin hasil">
+            📋 <span>Salin</span>
+          </button>
+        </div>
+        <div class="result-card rounded-xl p-6 max-h-96 overflow-y-auto">
+          <div id="loadingState" class="text-center py-8">
+            <div class="inline-block w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-600 loading-dots">Memproses file</p>
+          </div>
+          <pre id="result" class="hidden whitespace-pre-wrap text-sm text-gray-800 font-mono leading-relaxed"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-8 text-blue-100 text-sm">
+      <p>Powered by OCR Technology • Secure & Private</p>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script defer>
+    const form = document.getElementById('ocrForm');
+    const resultEl = document.getElementById('result');
+    const submitBtn = document.getElementById('submitBtn');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('formFile');
+    const filePreview = document.getElementById('filePreview');
+    const resultContainer = document.getElementById('resultContainer');
+    const loadingState = document.getElementById('loadingState');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const copyBtn = document.getElementById('copyBtn');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', e => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+    uploadArea.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) validateAndPreview(file);
+    });
+    fileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) validateAndPreview(file);
+    });
+
+    function validateAndPreview(file) {
+      const maxSize = 10 * 1024 * 1024;
+      const allowed = ['image/jpeg', 'image/png', 'application/pdf'];
+      if (!allowed.includes(file.type)) {
+        alert("Hanya mendukung JPG, PNG, atau PDF!");
+        fileInput.value = '';
+        return;
+      }
+      if (file.size > maxSize) {
+        alert("Ukuran maksimal 10MB!");
+        fileInput.value = '';
+        return;
+      }
+      showFilePreview(file);
+    }
+
+    function showFilePreview(file) {
+      document.getElementById('fileName').textContent = file.name;
+      document.getElementById('fileSize').textContent = formatFileSize(file.size);
+      document.getElementById('fileIcon').textContent = file.type.includes('pdf') ? '📄' : '🖼️';
+      document.getElementById('uploadDefault').classList.add('hidden');
+      filePreview.classList.remove('hidden');
+      uploadArea.classList.add('border-green-300', 'bg-green-50');
+    }
+
+    function formatFileSize(bytes) {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+    }
+
+    document.getElementById('removeFile').addEventListener('click', e => {
+      e.preventDefault();
+      fileInput.value = '';
+      filePreview.classList.add('hidden');
+      document.getElementById('uploadDefault').classList.remove('hidden');
+      uploadArea.classList.remove('border-green-300', 'bg-green-50');
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(resultEl.textContent);
+        copyBtn.innerHTML = "✅ Tersalin!";
+        setTimeout(() => copyBtn.innerHTML = "📋 <span>Salin</span>", 2000);
+      } catch {
+        alert("Gagal menyalin teks.");
+      }
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      resultContainer.classList.remove('hidden');
+      loadingState.classList.remove('hidden');
+      resultEl.classList.add('hidden');
+      btnText.classList.add('hidden');
+      btnSpinner.classList.remove('hidden');
+      submitBtn.disabled = true;
+
+      try {
+        const res = await fetch('/', { method: 'POST', body: formData });
+        const contentType = res.headers.get('content-type') || '';
+        const text = await res.text();
+
+        loadingState.classList.add('hidden');
+        resultEl.classList.remove('hidden');
+        resultEl.textContent = contentType.includes('json') ? JSON.stringify(JSON.parse(text), null, 2) : text;
+
+        resultContainer.classList.add('success-animation');
+        setTimeout(() => resultContainer.classList.remove('success-animation'), 600);
+      } catch (err) {
+        resultEl.textContent = "❌ Gagal memproses file.";
+      } finally {
+        btnText.classList.remove('hidden');
+        btnSpinner.classList.add('hidden');
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
