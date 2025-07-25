@@ -19,7 +19,7 @@ function cleanJSONText(text) {
 const CONFIG = {
   API_KEY: <<your_api_key>>,
   MODEL: 'gemini-2.5-flash',
-  PROMPT: `Tolong ekstrak teks dari gambar JPG atau file PDF ini. Output harus berupa JSON array of object, tanpa penjelasan tambahan.
+  PROMPT: `Tolong ekstrak teks dari JPG atau file PDF ini (hanya menerima file KTP/KK). Output harus berupa JSON array of object, tanpa penjelasan tambahan.
   Format yang digunakan:
   [
     (jika ada tampilkan {
