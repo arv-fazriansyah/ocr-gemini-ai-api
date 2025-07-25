@@ -21,25 +21,33 @@ const CONFIG = {
   MODEL: 'gemini-2.5-flash',
   PROMPT: `Tolong ekstrak teks dari gambar JPG atau file PDF ini. Output harus berupa JSON array of object, tanpa penjelasan tambahan.
   Format yang digunakan:
-  [{
-    "nama": "",
-    "tempat_tanggal_lahir": "",
-    "jenis_kelamin": "",
-    "golongan_darah": "",
-    "alamat": {
-      "jalan": "",
-      "RT": "",
-      "RW": "",
-      "desa": "",
-      "kecamatan": "",
-      "kabupaten": "",
-      "provinsi": ""
-    },
-    "agama": "",
-    "status_perkawinan": "",
-    "pekerjaan": "",
-    "kewarganegaraan": ""
-  }]`,
+  [
+    (jika ada tampilkan {
+      "no_kk": ""
+    }),
+    {
+      "data": {
+        "nik": "",
+        "nama": "",
+        "tempat_tanggal_lahir": "",
+        "jenis_kelamin": "",
+        "golongan_darah": "",
+        "alamat": {
+          "jalan": "",
+          "RT": "",
+          "RW": "",
+          "desa": "",
+          "kecamatan": "",
+          "kabupaten": "",
+          "provinsi": ""
+        },
+        "agama": "",
+        "status_perkawinan": "",
+        "pekerjaan": "",
+        "kewarganegaraan": ""
+      }
+    }
+  ]`,
 };
 
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${CONFIG.MODEL}:generateContent?key=${CONFIG.API_KEY}`;
